@@ -15,10 +15,13 @@ import {
   User2,
 } from "lucide-react";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
+import CreatePostModal from "../modal/createPost";
 
 export default function Home() {
   const [votes, setVotes] = useState(0);
   const [votesDown, setVotesDown] = useState(0);
+  const [modalOpen, setModalOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-gray-100 px-8 py-2">
       {/* Navbar */}
@@ -56,6 +59,8 @@ export default function Home() {
             <Input
               placeholder="What on you see?"
               className="bg-gray-50 hover:bg-gray-100 cursor-pointer rounded-full mb-2"
+              onClick={() => setModalOpen(true)}
+              readOnly
             />
           </div>
         </div>
@@ -80,14 +85,14 @@ export default function Home() {
         </div>
       </Card>
 
+      <CreatePostModal open={modalOpen} setOpen={setModalOpen} />
+
       <div className="mt-6 flex justify-center">
         <Card className=" w-full max-w-xl p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
           {/* User Info Section */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden">
-                {/* Add user image here if available */}
-              </div>
+              <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden">{/* Add user image here if available */}</div>
               <div>
                 <p className="font-semibold text-gray-800">Name</p>
                 <p className="text-xs text-gray-500 flex items-center gap-1">
@@ -110,9 +115,7 @@ export default function Home() {
           </div>
 
           {/* Image Section */}
-          <div className="mt-4 h-24 bg-gray-100 rounded-lg overflow-hidden">
-            {/* Add image here */}
-          </div>
+          <div className="mt-4 h-24 bg-gray-100 rounded-lg overflow-hidden">{/* Add image here */}</div>
 
           {/* Actions Section */}
           <div className="mt-2 pt-4 border-t border-gray-100">
@@ -123,9 +126,7 @@ export default function Home() {
                   className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors group"
                 >
                   <ThumbsUp className="w-5 h-5 text-gray-500 group-hover:text-blue-500" />
-                  <span className="text-sm font-medium text-gray-600 group-hover:text-blue-500">
-                    {votes}
-                  </span>
+                  <span className="text-sm font-medium text-gray-600 group-hover:text-blue-500">{votes}</span>
                 </button>
 
                 <button
@@ -133,9 +134,7 @@ export default function Home() {
                   className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors group"
                 >
                   <ThumbsDown className="w-5 h-5 text-gray-500 group-hover:text-red-500" />
-                  <span className="text-sm font-medium text-gray-600 group-hover:text-blue-500">
-                    {votesDown}
-                  </span>
+                  <span className="text-sm font-medium text-gray-600 group-hover:text-blue-500">{votesDown}</span>
                 </button>
 
                 <button className="flex items-center gap-2 px-4 py-2 hover:bg-gray-50 rounded-lg transition-colors group">
@@ -153,9 +152,7 @@ export default function Home() {
                 className="w-full border-0 border-b border-gray-200 focus:border-blue-500 rounded-none px-0 py-2 focus:ring-0 transition-colors"
               />
             </div>
-            <button className="mt-2 text-sm text-gray-500 hover:text-gray-700">
-              View all comments
-            </button>
+            <button className="mt-2 text-sm text-gray-500 hover:text-gray-700">View all comments</button>
           </div>
         </Card>
       </div>
