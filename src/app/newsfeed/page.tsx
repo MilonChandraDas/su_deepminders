@@ -8,7 +8,7 @@ const pages = () => {
       <div className="w-1/4">
         <Leftside />
       </div>
-      <div className="w-1/2">
+      <div className="w-full">
         <Feed />
       </div>
       <div className="w-1/4">
