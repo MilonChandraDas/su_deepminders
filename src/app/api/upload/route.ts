@@ -1,8 +1,10 @@
 import { getCurrentUser } from "@/lib/auth.utils";
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from 'fs/promises';
+import { writeFile, mkdir, readdir } from 'fs/promises';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { createReadStream } from 'fs';
+import { stat } from 'fs/promises';
 
 export async function POST(req: Request) {
     try {
@@ -46,3 +48,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
     }
 }
+
+
+
+

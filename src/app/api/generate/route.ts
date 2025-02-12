@@ -50,7 +50,7 @@ export async function POST(req: Request) {
             fileToGenerativePart(imagePath, mimeType),
         ];
 
-        const prompt = `Genarate title and description for this image if the image is a crime scene photo. Say it in first person POV. If not than do not generate anything. Output in this JSON schema
+        const prompt = `Genarate title and description for the crime scence photo. Say it in first person POV. Output in this JSON schema
         {
             "title": string,
             "description": string

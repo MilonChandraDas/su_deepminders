@@ -74,7 +74,7 @@ export async function PATCH(
             data: {
                 title,
                 description,
-                districtId,
+                districtName: districtId,
                 crimeTime: new Date(crimeTime),
                 latitude,
                 longitude,
