@@ -65,21 +65,26 @@ export default function Home() {
     <div className="min-h-screen bg-gray-100 px-8 py-2">
       {/* Navbar */}
       <nav className="flex bg-white p-4 text-center rounded shadow">
-        <div className="flex justify-center w-full gap-8">
-          <button className="flex items-center justify-center text-lg font-semibold px-4 py-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-blue-600">
-            <House className="w-6 h-6" />
+        <div className="flex justify-between sm:justify-center w-full sm:gap-8">
+          <button className="flex items-center justify-center text-lg font-semibold p-2 sm:px-4 sm:py-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-blue-600">
+        <House className="w-5 h-5 sm:w-6 sm:h-6" />
+        <span className="hidden sm:inline ml-2">Home</span>
           </button>
-          <button className="flex items-center justify-center text-lg font-semibold px-4 py-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-blue-600">
-            <User2 className="w-6 h-6" />
+          <button className="flex items-center justify-center text-lg font-semibold p-2 sm:px-4 sm:py-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-blue-600">
+        <User2 className="w-5 h-5 sm:w-6 sm:h-6" />
+        <span className="hidden sm:inline ml-2">Profile</span>
           </button>
-          <button className="flex items-center justify-center text-lg font-semibold px-4 py-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-blue-600">
-            <Settings className="w-6 h-6" />
+          <button className="flex items-center justify-center text-lg font-semibold p-2 sm:px-4 sm:py-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-blue-600">
+        <Settings className="w-5 h-5 sm:w-6 sm:h-6" />
+        <span className="hidden sm:inline ml-2">Settings</span>
           </button>
-          <button className="flex items-center justify-center text-lg font-semibold px-4 py-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-blue-600">
-            <BellDot className="w-6 h-6" />
+          <button className="flex items-center justify-center text-lg font-semibold p-2 sm:px-4 sm:py-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-blue-600">
+        <BellDot className="w-5 h-5 sm:w-6 sm:h-6" />
+        <span className="hidden sm:inline ml-2">Notifications</span>
           </button>
-          <button className="flex items-center justify-center text-lg font-semibold px-4 py-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-blue-600">
-            <LogOut className="w-6 h-6" onClick={logout} />
+          <button className="flex items-center justify-center text-lg font-semibold p-2 sm:px-4 sm:py-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-blue-600" onClick={logout}>
+        <LogOut className="w-5 h-5 sm:w-6 sm:h-6" />
+        <span className="hidden sm:inline ml-2">Logout</span>
           </button>
         </div>
       </nav>

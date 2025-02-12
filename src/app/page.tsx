@@ -1,20 +1,21 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
-    // Redirect to the newsfeed page
-    router.push('/newsfeed');
-  }, [router]);
+    if (!isAuthenticated) {
+      router.push("/signin");
+    } else {
+      router.push("/newsfeed");
+    }
+  }, [isAuthenticated, router]);
 
-  return (
-    <main className="min-h-screen p-4">
-      <h1 className="text-2xl font-bold mb-4">News Feed</h1>
-      {/* Add your newsfeed content here */}
-    </main>
-  );
+  // Return loading state while redirect happens
+  return <main className="min-h-screen p-4">Loading...</main>;
 }
