@@ -1,0 +1,164 @@
+"use client";
+import { useState } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import Image from "next/image";
+import {
+  BellDot,
+  House,
+  LogOut,
+  Settings,
+  Share2,
+  User,
+  User2,
+} from "lucide-react";
+import { ThumbsUp, ThumbsDown } from "lucide-react";
+
+export default function Home() {
+  const [votes, setVotes] = useState(0);
+  const [votesDown, setVotesDown] = useState(0);
+  return (
+    <div className="min-h-screen bg-gray-100 px-8 py-2">
+      {/* Navbar */}
+      <nav className="flex bg-white p-4 text-center rounded shadow">
+        <div className="flex justify-center w-full gap-8">
+          <button className="flex items-center justify-center text-lg font-semibold px-4 py-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-blue-600">
+            <House className="w-6 h-6" />
+          </button>
+          <button className="flex items-center justify-center text-lg font-semibold px-4 py-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-blue-600">
+            <User2 className="w-6 h-6" />
+          </button>
+          <button className="flex items-center justify-center text-lg font-semibold px-4 py-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-blue-600">
+            <Settings className="w-6 h-6" />
+          </button>
+          <button className="flex items-center justify-center text-lg font-semibold px-4 py-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-blue-600">
+            <BellDot className="w-6 h-6" />
+          </button>
+          <button className="flex items-center justify-center text-lg font-semibold px-4 py-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-blue-600">
+            <LogOut className="w-6 h-6" />
+          </button>
+        </div>
+      </nav>
+
+      <Card className="p-4 mt-2 bg-white">
+        <div className="flex items-start gap-3 mb-4">
+          <div className="relative w-10 h-10 flex-shrink-0">
+            <Image
+              src="" // Add your default avatar image
+              alt="User avatar"
+              fill
+              className="rounded-full object-cover"
+            />
+          </div>
+          <div className="flex-grow">
+            <Input
+              placeholder="What on you see?"
+              className="bg-gray-50 hover:bg-gray-100 cursor-pointer rounded-full mb-2"
+            />
+          </div>
+        </div>
+
+        <div className="border-t pt-3">
+          <div className="flex justify-between items-center">
+            <button className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-600">
+              <span>📷</span>
+              <input type="file" />
+            </button>
+
+            <button className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-600">
+              <span>📍</span>
+              Location
+            </button>
+
+            <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors text-white">
+              <span>✉️</span>
+              Post
+            </button>
+          </div>
+        </div>
+      </Card>
+
+      <div className="mt-6 flex justify-center">
+        <Card className=" w-full max-w-xl p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
+          {/* User Info Section */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden">
+                {/* Add user image here if available */}
+              </div>
+              <div>
+                <p className="font-semibold text-gray-800">Name</p>
+                <p className="text-xs text-gray-500 flex items-center gap-1">
+                  <span>2 hours ago</span>
+                  <span>•</span>
+                  <span>📍 Location</span>
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <Checkbox checked className="data-[state=checked]:bg-blue-500" />
+              <span className="text-gray-600">Verified</span>
+            </div>
+          </div>
+
+          {/* Content Section */}
+          <div className="mt-3">
+            <h2 className="text-xl font-semibold text-gray-800">Title</h2>
+            <p className="mt-1 text-gray-600 leading-relaxed">Description...</p>
+          </div>
+
+          {/* Image Section */}
+          <div className="mt-4 h-24 bg-gray-100 rounded-lg overflow-hidden">
+            {/* Add image here */}
+          </div>
+
+          {/* Actions Section */}
+          <div className="mt-2 pt-4 border-t border-gray-100">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-6">
+                <button
+                  onClick={() => setVotes((prev) => prev + 1)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors group"
+                >
+                  <ThumbsUp className="w-5 h-5 text-gray-500 group-hover:text-blue-500" />
+                  <span className="text-sm font-medium text-gray-600 group-hover:text-blue-500">
+                    {votes}
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => setVotesDown((prev) => prev - 1)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors group"
+                >
+                  <ThumbsDown className="w-5 h-5 text-gray-500 group-hover:text-red-500" />
+                  <span className="text-sm font-medium text-gray-600 group-hover:text-blue-500">
+                    {votesDown}
+                  </span>
+                </button>
+
+                <button className="flex items-center gap-2 px-4 py-2 hover:bg-gray-50 rounded-lg transition-colors group">
+                  <Share2 className="w-5 h-5 text-gray-500 group-hover:text-blue-500" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Comment Section */}
+          <div className="mt-4">
+            <div className="relative">
+              <Input
+                placeholder="Write a comment..."
+                className="w-full border-0 border-b border-gray-200 focus:border-blue-500 rounded-none px-0 py-2 focus:ring-0 transition-colors"
+              />
+            </div>
+            <button className="mt-2 text-sm text-gray-500 hover:text-gray-700">
+              View all comments
+            </button>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+}
