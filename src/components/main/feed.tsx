@@ -50,7 +50,7 @@ export default function Home() {
         <div className="flex items-start gap-3 mb-4">
           <div className="relative w-10 h-10 flex-shrink-0">
             <Image
-              src="" // Add your default avatar image
+              src="/bd.webp"
               alt="User avatar"
               fill
               className="rounded-full object-cover"
@@ -66,24 +66,6 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="border-t pt-3">
-          <div className="flex justify-between items-center">
-            <button className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-600">
-              <span>📷</span>
-              <input type="file" />
-            </button>
-
-            <button className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-600">
-              <span>📍</span>
-              Location
-            </button>
-
-            <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors text-white">
-              <span>✉️</span>
-              Post
-            </button>
-          </div>
-        </div>
       </Card>
 
       <CreatePostModal open={modalOpen} setOpen={setModalOpen} />
@@ -93,7 +75,9 @@ export default function Home() {
           {/* User Info Section */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden">{/* Add user image here if available */}</div>
+              <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden">
+                {/* Add user image here if available */}
+              </div>
               <div>
                 <p className="font-semibold text-gray-800">Name</p>
                 <p className="text-xs text-gray-500 flex items-center gap-1">
@@ -104,8 +88,7 @@ export default function Home() {
               </div>
             </div>
             <div className="flex items-center gap-2 text-sm">
-            <ShieldCheck className="w-5 h-5 text-blue-500" />
-              
+              <ShieldCheck className="w-5 h-5 text-blue-500" />
             </div>
           </div>
 
@@ -116,7 +99,9 @@ export default function Home() {
           </div>
 
           {/* Image Section */}
-          <div className="mt-4 h-24 bg-gray-100 rounded-lg overflow-hidden">{/* Add image here */}</div>
+          <div className="mt-4 h-24 bg-gray-100 rounded-lg overflow-hidden">
+            {/* Add image here */}
+          </div>
 
           {/* Actions Section */}
           <div className="mt-2 pt-4 border-t border-gray-100">
@@ -127,7 +112,9 @@ export default function Home() {
                   className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors group"
                 >
                   <ThumbsUp className="w-5 h-5 text-gray-500 group-hover:text-blue-500" />
-                  <span className="text-sm font-medium text-gray-600 group-hover:text-blue-500">{votes}</span>
+                  <span className="text-sm font-medium text-gray-600 group-hover:text-blue-500">
+                    {votes}
+                  </span>
                 </button>
 
                 <button
@@ -135,7 +122,9 @@ export default function Home() {
                   className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors group"
                 >
                   <ThumbsDown className="w-5 h-5 text-gray-500 group-hover:text-red-500" />
-                  <span className="text-sm font-medium text-gray-600 group-hover:text-blue-500">{votesDown}</span>
+                  <span className="text-sm font-medium text-gray-600 group-hover:text-blue-500">
+                    {votesDown}
+                  </span>
                 </button>
 
                 <button className="flex items-center gap-2 px-4 py-2 hover:bg-gray-50 rounded-lg transition-colors group">
@@ -153,7 +142,9 @@ export default function Home() {
                 className="w-full border-0 border-b border-gray-200 focus:border-blue-500 rounded-none px-0 py-2 focus:ring-0 transition-colors"
               />
             </div>
-            <button className="mt-2 text-sm text-gray-500 hover:text-gray-700">View all comments</button>
+            <button className="mt-2 text-sm text-gray-500 hover:text-gray-700">
+              View all comments
+            </button>
           </div>
         </Card>
       </div>
