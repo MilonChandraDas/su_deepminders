@@ -11,6 +11,7 @@ import {
   LogOut,
   Settings,
   Share2,
+  ShieldCheck,
   User,
   User2,
 } from "lucide-react";
@@ -103,8 +104,8 @@ export default function Home() {
               </div>
             </div>
             <div className="flex items-center gap-2 text-sm">
-              <Checkbox checked className="data-[state=checked]:bg-blue-500" />
-              <span className="text-gray-600">Verified</span>
+            <ShieldCheck className="w-5 h-5 text-blue-500" />
+              
             </div>
           </div>
 
