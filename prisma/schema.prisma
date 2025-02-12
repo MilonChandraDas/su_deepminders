@@ -1,0 +1,148 @@
+// schema.prisma
+
+// 1. Generator and Datasource configuration
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite" // Change this if using a different DB provider.
+  url      = env("DATABASE_URL")
+}
+
+// 2. Enums
+enum Role {
+  USER
+  ADMIN
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+// 3. Models
+
+// User model for authentication, profile and authorization.
+model User {
+  id             Int            @id @default(autoincrement())
+  email          String         @unique
+  password       String
+  phoneNumber    String
+  isVerified     Boolean        @default(false) // Phone/OTP verified flag.
+  isBanned       Boolean        @default(false) // Set to true if an admin bans the user.
+  role           Role           @default(USER)
+  profilePicture String? // URL to the profile image.
+  bio            String?
+  // Relations
+  crimeReports   CrimeReport[]
+  comments       Comment[]
+  votes          Vote[]
+  refreshTokens  RefreshToken[]
+  otps           OTP[]
+  // Timestamps
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+// Model for storing refresh tokens.
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime @default(now())
+}
+
+// Model for OTP codes used in phone verification and password recovery.
+model OTP {
+  id        Int      @id @default(autoincrement())
+  code      String
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime @default(now())
+}
+
+// Optional: Predefined Division and District for Bangladesh.
+model Division {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  districts District[]
+}
+
+model District {
+  id           Int           @id @default(autoincrement())
+  name         String
+  division     Division      @relation(fields: [divisionId], references: [id])
+  divisionId   Int
+  crimeReports CrimeReport[]
+}
+
+// Main model for a crime report.
+model CrimeReport {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  // Instead of storing plain strings for location, we reference a District.
+  district    District @relation(fields: [districtId], references: [id])
+  districtId  Int
+  // Optional geolocation fields (helpful for a heatmap view)
+  latitude    Float?
+
+  longitude  Float?
+  postTime   DateTime  @default(now())
+  crimeTime  DateTime
+  // A report may have one or more media attachments (images and/or an optional video).
+  media      Media[]
+  // The verified (and only allowed) user who posted the report.
+  postedBy   User      @relation(fields: [postedById], references: [id])
+  postedById Int
+  // Community interaction
+  votes      Vote[]
+  comments   Comment[]
+}
+
+// Model for upvotes/downvotes on a crime report.
+// A vote’s value is expected to be 1 (upvote) or -1 (downvote).
+model Vote {
+  id            Int         @id @default(autoincrement())
+  value         Int
+  user          User        @relation(fields: [userId], references: [id])
+  userId        Int
+  crimeReport   CrimeReport @relation(fields: [crimeReportId], references: [id])
+  crimeReportId Int
+
+  // Ensure a user can vote only once per crime report.
+  @@unique([userId, crimeReportId])
+}
+
+// Model for comments on a crime report.
+// Each comment must include at least one proof attachment (handled in the application logic).
+model Comment {
+  id            Int         @id @default(autoincrement())
+  content       String
+  postTime      DateTime    @default(now())
+  postedBy      User        @relation(fields: [postedById], references: [id])
+  postedById    Int
+  crimeReport   CrimeReport @relation(fields: [crimeReportId], references: [id])
+  crimeReportId Int
+  // A comment may have one or more proof attachments.
+  media         Media[]
+}
+
+// Model for storing media files (images or videos).
+// A media record may be associated with either a CrimeReport or a Comment.
+model Media {
+  id            Int          @id @default(autoincrement())
+  url           String // URL or path to the file.
+  type          MediaType
+  createdAt     DateTime     @default(now())
+  // Optional relation: the media can be attached to a crime report.
+  crimeReport   CrimeReport? @relation(fields: [crimeReportId], references: [id])
+  crimeReportId Int?
+  // Optional relation: the media can be attached to a comment.
+  comment       Comment?     @relation(fields: [commentId], references: [id])
+  commentId     Int?
+}
