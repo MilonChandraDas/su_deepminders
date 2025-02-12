@@ -104,6 +104,9 @@ export default function CreatePostModal({ open, setOpen, onSuccess }: CreatePost
       setPreview(null);
       onSuccess?.();
       setOpen(false);
+
+      // reload the page
+      window.location.reload();
     } catch (error) {
       console.error("Failed to create post:", error);
     } finally {
