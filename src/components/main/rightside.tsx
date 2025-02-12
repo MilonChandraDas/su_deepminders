@@ -1,18 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Image from "next/image";
 import { X, MenuSquare } from "lucide-react";
+import { districts } from "@/lib/districts";
+import { useAuth } from "@/context/AuthContext";
+import { User } from "@prisma/client";
+import { getUser, UserResponse } from "@/lib/api.utils";
 
 const Rightside = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [districtId, setDistrictId] = useState<string>("");
+  const [user, setUser] = useState<UserResponse | null>(null);
 
   // Close sidebar on larger screens
   useEffect(() => {
@@ -21,6 +21,13 @@ const Rightside = () => {
         setIsOpen(false);
       }
     };
+
+    const fetchUser = async () => {
+      const _user = await getUser();
+      setUser(_user);
+    };
+
+    fetchUser();
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -34,8 +41,8 @@ const Rightside = () => {
         <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
           <div className="w-12 h-12 bg-gray-200 rounded-full" />
           <div>
-            <p className="font-medium">John Doe</p>
-            <p className="text-sm text-gray-500">@johndoe</p>
+            <p className="font-medium">{user?.email.split("@")[0]}</p>
+            <p className="text-sm text-gray-500">{user?.email.split("@")[1]}</p>
           </div>
         </div>
       </div>
@@ -45,14 +52,7 @@ const Rightside = () => {
         <h2 className="text-xl font-semibold mb-4">Activity</h2>
         <div className="p-4 bg-gray-50 rounded-lg">
           <div className="aspect-video bg-gray-200 rounded-md overflow-hidden">
-            <Image
-              src="/bd.webp"
-              alt="Activity heat map"
-              width={500}
-              height={500}
-              className="w-full h-full object-cover"
-              quality={100}
-            />
+            <Image src="/bd.webp" alt="Activity heat map" width={500} height={500} className="w-full h-full object-cover" quality={100} />
           </div>
         </div>
       </div>
@@ -62,18 +62,18 @@ const Rightside = () => {
         <h2 className="text-xl font-semibold mb-4">Location</h2>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700">
-              Division
-            </label>
-            <Select>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a division" />
+            <label className="block text-sm font-medium mb-1 text-gray-700">Division</label>
+            <Select value={districtId} onValueChange={setDistrictId}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="District" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="dhaka">Dhaka</SelectItem>
-                <SelectItem value="cumilla">Cumilla</SelectItem>
-                <SelectItem value="chittagong">Chittagong</SelectItem>
-                <SelectItem value="sylhet">Sylhet</SelectItem>
+                {/* <SelectItem value="1">District 1</SelectItem> */}
+                {districts.map((district) => (
+                  <SelectItem key={district} value={district}>
+                    {district}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -82,9 +82,7 @@ const Rightside = () => {
 
       {/* Footer Section */}
       <div className="mt-auto pt-4 border-t">
-        <p className="text-sm text-gray-500 text-center">
-          © 2025 SU_DeepMinders
-        </p>
+        <p className="text-sm text-gray-500 text-center">© 2025 SU_DeepMinders</p>
       </div>
     </>
   );
@@ -92,15 +90,8 @@ const Rightside = () => {
   return (
     <>
       {/* Mobile Toggle Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-4 right-4 z-50 p-2 rounded-lg bg-white shadow-md"
-      >
-        {isOpen ? (
-          <X className="w-6 h-6 text-gray-600" />
-        ) : (
-          <MenuSquare className="w-6 h-6 text-gray-600" />
-        )}
+      <button onClick={() => setIsOpen(!isOpen)} className="lg:hidden fixed top-4 right-4 z-50 p-2 rounded-lg bg-white shadow-md">
+        {isOpen ? <X className="w-6 h-6 text-gray-600" /> : <MenuSquare className="w-6 h-6 text-gray-600" />}
       </button>
 
       {/* Mobile Overlay */}

@@ -22,6 +22,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
 
+  
+
   useEffect(() => {
     const checkAuth = async () => {
       const token = Cookies.get("token");

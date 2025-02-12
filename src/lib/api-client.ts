@@ -8,7 +8,16 @@ export const api = axios.create({
   },
 });
 
-
+// Add response interceptor
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      window.location.href = '/signin';
+    }
+    return Promise.reject(error);
+  }
+);
 
 export interface PaginatedResponse<T> {
   data: T[];
