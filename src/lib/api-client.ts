@@ -28,7 +28,6 @@ export interface CrimeReport {
   };
   media: Array<{
     id: number;
-    url: string;
     type: 'IMAGE' | 'VIDEO';
   }>;
   _count?: {
