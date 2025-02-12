@@ -6,6 +6,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Image from "next/image";
+
 
 
 const rightside = () => {
@@ -28,7 +30,13 @@ const rightside = () => {
         <h2 className="text-xl font-semibold mb-4">Activity</h2>
         <div className="p-4 bg-gray-50 rounded-lg">
           <div className="aspect-video bg-gray-200 rounded-md flex items-center justify-center text-gray-500">
-            Heat Map
+            <Image
+              src="/bd.webp"
+              alt="Picture of the author"
+              width={500}
+              height={500}
+              quality={100}
+            />
           </div>
         </div>
       </div>
@@ -58,7 +66,9 @@ const rightside = () => {
 
       {/* Footer Section */}
       <div className="mt-auto pt-4 border-t">
-        <p className="text-sm text-gray-500 text-center">© 2025 SU_DeepMinders</p>
+        <p className="text-sm text-gray-500 text-center">
+          © 2025 SU_DeepMinders
+        </p>
       </div>
     </div>
   );
