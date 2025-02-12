@@ -63,7 +63,7 @@ export default function Upload() {
             </div>
           )}
           <button onClick={handleUpload} disabled={!selectedFile} className="px-4 py-2 bg-foreground text-background rounded disabled:opacity-50">
-            Upload Image
+            {/* Upload Image */}
           </button>
         </div>
 

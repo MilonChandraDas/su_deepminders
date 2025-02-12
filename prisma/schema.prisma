@@ -136,6 +136,7 @@ model Comment {
 // A media record may be associated with either a CrimeReport or a Comment.
 model Media {
   id            Int          @id @default(autoincrement())
+  fileID        String
   url           String // URL or path to the file.
   type          MediaType
   createdAt     DateTime     @default(now())
