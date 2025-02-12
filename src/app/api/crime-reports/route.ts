@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth.utils';
+import { MediaType } from '@prisma/client';  // Add this import
 
 export async function POST(req: Request) {
   try {
@@ -9,17 +10,24 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { title, description, districtId, crimeTime, latitude, longitude } = await req.json();
-    
+    const { title, description, districtId, fileId } = await req.json();
+
+    const crimeTime = new Date();
+
+
     const crimeReport = await prisma.crimeReport.create({
       data: {
         title,
         description,
         districtId,
         crimeTime: new Date(crimeTime),
-        latitude,
-        longitude,
         postedById: user.id,
+        media: {
+          create: {
+            url: `/api/uploads/${fileId}`,
+            type: MediaType.IMAGE
+          }
+        }
       },
     });
 
@@ -37,7 +45,7 @@ export async function GET(req: Request) {
     const districtId = searchParams.get('districtId');
 
     const where = districtId ? { districtId: parseInt(districtId) } : {};
-    
+
     const crimeReports = await prisma.crimeReport.findMany({
       where,
       include: {

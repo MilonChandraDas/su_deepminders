@@ -1,3 +1,4 @@
+import { CrimeReport } from '@prisma/client';
 import axios from 'axios';
 
 export const api = axios.create({
@@ -7,34 +8,7 @@ export const api = axios.create({
   },
 });
 
-export interface CrimeReport {
-  id: number;
-  title: string;
-  description: string;
-  districtId: number;
-  latitude: number | null;
-  longitude: number | null;
-  postTime: string;
-  crimeTime: string;
-  postedById: number;
-  district: {
-    id: number;
-    name: string;
-  };
-  postedBy: {
-    id: number;
-    email: string;
-    profilePicture: string | null;
-  };
-  media: Array<{
-    id: number;
-    type: 'IMAGE' | 'VIDEO';
-  }>;
-  _count?: {
-    comments: number;
-    votes: number;
-  };
-}
+
 
 export interface PaginatedResponse<T> {
   data: T[];
@@ -46,8 +20,15 @@ export interface PaginatedResponse<T> {
   };
 }
 
+type CreateCrimeReportPayload = {
+  title: string;
+  description: string;
+  districtId: number;
+  fileId: string;
+}
+
 export const crimeReportsApi = {
-  create: (data: Partial<CrimeReport>) =>
+  create: (data: CreateCrimeReportPayload) =>
     api.post<CrimeReport>('/crime-reports', data),
 
   list: (params?: { page?: number; limit?: number; districtId?: number }) =>

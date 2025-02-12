@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { crimeReportsApi } from "@/lib/api-client";
+import { districts } from "@/lib/districts";
 
 interface CreatePostModalProps {
   open: boolean;
@@ -23,35 +24,41 @@ export default function CreatePostModal({ open, setOpen, onSuccess }: CreatePost
   const [isGenerating, setIsGenerating] = useState(false);
   const [fileId, setFileId] = useState<string | null>(null);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
       setPreview(URL.createObjectURL(file));
+
+      try {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const uploadRes = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+        const { id: imageId } = await uploadRes.json();
+        setFileId(imageId);
+      } catch (error) {
+        console.error("Upload failed:", error);
+        alert("Failed to upload image. Please try again.");
+        setSelectedFile(null);
+        setPreview(null);
+      }
     }
   };
 
   const handleGenerate = async () => {
-    if (!selectedFile) return;
+    if (!fileId) return;
     setIsGenerating(true);
 
     try {
-      const formData = new FormData();
-      formData.append("image", selectedFile);
-
-      // Upload the image first
-      const uploadRes = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const { id: imageId } = await uploadRes.json();
-      setFileId(imageId);
-
-      // Generate the description
+      // Generate the description using the already uploaded file
       const genRes = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ imageId }),
+        body: JSON.stringify({ imageId: fileId }),
       });
       const { title: genTitle, description: genDescription } = await genRes.json();
 
@@ -78,10 +85,7 @@ export default function CreatePostModal({ open, setOpen, onSuccess }: CreatePost
         title,
         description,
         districtId: parseInt(districtId),
-        media: [{
-          type: "IMAGE",
-          id: fileId,
-        }]
+        fileId,
       });
 
       setTitle("");
@@ -112,9 +116,12 @@ export default function CreatePostModal({ open, setOpen, onSuccess }: CreatePost
               <SelectValue placeholder="District" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">District 1</SelectItem>
-              <SelectItem value="2">District 2</SelectItem>
-              <SelectItem value="3">District 3</SelectItem>
+              {/* <SelectItem value="1">District 1</SelectItem> */}
+              {districts.map((district) => (
+                <SelectItem key={district} value={district}>
+                  {district}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
