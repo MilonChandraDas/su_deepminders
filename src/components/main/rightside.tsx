@@ -1,3 +1,5 @@
+"use client";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -7,12 +9,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Image from "next/image";
+import { X, MenuSquare } from "lucide-react";
 
+const Rightside = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
+  // Close sidebar on larger screens
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setIsOpen(false);
+      }
+    };
 
-const rightside = () => {
-  return (
-    <div className="fixed right-0 top-0 h-screen w-80 p-6 bg-white border-l">
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const SidebarContent = () => (
+    <>
       {/* User Profile Section */}
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Profile</h2>
@@ -29,12 +44,13 @@ const rightside = () => {
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Activity</h2>
         <div className="p-4 bg-gray-50 rounded-lg">
-          <div className="aspect-video bg-gray-200 rounded-md flex items-center justify-center text-gray-500">
+          <div className="aspect-video bg-gray-200 rounded-md overflow-hidden">
             <Image
               src="/bd.webp"
-              alt="Picture of the author"
+              alt="Activity heat map"
               width={500}
               height={500}
+              className="w-full h-full object-cover"
               quality={100}
             />
           </div>
@@ -70,8 +86,51 @@ const rightside = () => {
           © 2025 SU_DeepMinders
         </p>
       </div>
-    </div>
+    </>
+  );
+
+  return (
+    <>
+      {/* Mobile Toggle Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="lg:hidden fixed top-4 right-4 z-50 p-2 rounded-lg bg-white shadow-md"
+      >
+        {isOpen ? (
+          <X className="w-6 h-6 text-gray-600" />
+        ) : (
+          <MenuSquare className="w-6 h-6 text-gray-600" />
+        )}
+      </button>
+
+      {/* Mobile Overlay */}
+      <div
+        className={`lg:hidden fixed inset-0 bg-gray-800 bg-opacity-50 z-40 transition-opacity duration-300 ${
+          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setIsOpen(false)}
+      >
+        <div
+          className={`absolute right-0 w-80 h-full bg-white shadow-xl transition-transform duration-300 transform ${
+            isOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="h-full flex flex-col p-6 overflow-y-auto">
+            <SidebarContent />
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:block">
+        <div className="fixed right-0 top-0 h-screen w-80 flex flex-col bg-white border-l p-6 overflow-y-auto">
+          <SidebarContent />
+        </div>
+        <div className="w-80" /> {/* Spacer */}
+      </div>
+    </>
   );
 };
 
-export default rightside;
+export default Rightside;
