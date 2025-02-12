@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { verifyAccessToken } from "@/lib/auth";
 import Cookies from "js-cookie";
+import { redirect } from "next/navigation";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -21,8 +22,6 @@ const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
-
-  
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -52,6 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     Cookies.remove("token");
     setIsAuthenticated(false);
     setUserId(null);
+    redirect("/signin");
   };
 
   return <AuthContext.Provider value={{ isAuthenticated, login, logout, userId }}>{children}</AuthContext.Provider>;

@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/lib/auth.utils";
 import { NextResponse } from "next/server";
-import { writeFile, mkdir, readdir } from 'fs/promises';
+import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 

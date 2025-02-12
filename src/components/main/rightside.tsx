@@ -5,8 +5,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import Image from "next/image";
 import { X, MenuSquare } from "lucide-react";
 import { districts } from "@/lib/districts";
-import { useAuth } from "@/context/AuthContext";
-import { User } from "@prisma/client";
 import { getUser, UserResponse } from "@/lib/api.utils";
 
 const Rightside = () => {
@@ -50,9 +48,9 @@ const Rightside = () => {
       {/* Heat Map Section */}
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Activity</h2>
-        <div className="p-4 bg-gray-50 rounded-lg">
+        <div className="p-1 bg-gray-50 rounded-lg">
           <div className="aspect-video bg-gray-200 rounded-md overflow-hidden">
-            <Image src="/bd.webp" alt="Activity heat map" width={500} height={500} className="w-full h-full object-cover" quality={100} />
+            <Image src="/bd_map.png" alt="Activity heat map" width={500} height={500} className="w-full h-full object-fit" quality={100} />
           </div>
         </div>
       </div>
@@ -68,7 +66,6 @@ const Rightside = () => {
                 <SelectValue placeholder="District" />
               </SelectTrigger>
               <SelectContent>
-                {/* <SelectItem value="1">District 1</SelectItem> */}
                 {districts.map((district) => (
                   <SelectItem key={district} value={district}>
                     {district}
@@ -78,11 +75,6 @@ const Rightside = () => {
             </Select>
           </div>
         </div>
-      </div>
-
-      {/* Footer Section */}
-      <div className="mt-auto pt-4 border-t">
-        <p className="text-sm text-gray-500 text-center">© 2025 SU_DeepMinders</p>
       </div>
     </>
   );

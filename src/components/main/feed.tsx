@@ -1,9 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
 import { BellDot, House, LogOut, Settings, Share2, ShieldCheck, User, User2 } from "lucide-react";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
@@ -11,6 +9,7 @@ import CreatePostModal from "../modal/createPost";
 import { crimeReportsApi, type PaginatedResponse } from "@/lib/api-client";
 import { CrimeReport } from "@prisma/client";
 import { formatDistanceToNow } from "date-fns";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Home() {
   const [votes, setVotes] = useState(0);
@@ -19,6 +18,8 @@ export default function Home() {
   const [reports, setReports] = useState<CrimeReport[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const { logout } = useAuth();
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -78,7 +79,7 @@ export default function Home() {
             <BellDot className="w-6 h-6" />
           </button>
           <button className="flex items-center justify-center text-lg font-semibold px-4 py-2 rounded-lg transition-colors hover:bg-gray-100 hover:text-blue-600">
-            <LogOut className="w-6 h-6" />
+            <LogOut className="w-6 h-6" onClick={logout} />
           </button>
         </div>
       </nav>
@@ -129,9 +130,11 @@ export default function Home() {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <ShieldCheck className="w-5 h-5 text-blue-500" />
-                </div>
+                {report._count?.votes > 0 && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <ShieldCheck className="w-5 h-5 text-blue-500" />
+                  </div>
+                )}
               </div>
 
               <div className="mt-3">
