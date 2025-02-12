@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,6 +33,31 @@ export default function Home() {
     };
 
     fetchReports();
+  }, []);
+
+  const handleVote = useCallback(async (reportId: number, value: 1 | -1) => {
+    try {
+      await crimeReportsApi.vote(reportId, { value });
+
+      // Optimistically update the reports state
+      setReports((prevReports) =>
+        prevReports.map((report) => {
+          if (report.id === reportId) {
+            // Assuming _count exists in the report object
+            return {
+              ...report,
+              _count: {
+                ...report._count,
+                votes: (report._count?.votes || 0) + value,
+              },
+            };
+          }
+          return report;
+        })
+      );
+    } catch (error) {
+      alert("Failed to vote. Please try again.");
+    }
   }, []);
 
   return (
@@ -124,19 +149,18 @@ export default function Home() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-6">
                     <button
-                      onClick={() => setVotes((prev) => prev + 1)}
+                      onClick={() => handleVote(report.id, 1)}
                       className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors group"
                     >
                       <ThumbsUp className="w-5 h-5 text-gray-500 group-hover:text-blue-500" />
-                      <span className="text-sm font-medium text-gray-600 group-hover:text-blue-500">{votes}</span>
+                      <span className="text-sm font-medium text-gray-600 group-hover:text-blue-500">{report._count?.votes || 0}</span>
                     </button>
 
                     <button
-                      onClick={() => setVotesDown((prev) => prev - 1)}
+                      onClick={() => handleVote(report.id, -1)}
                       className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors group"
                     >
                       <ThumbsDown className="w-5 h-5 text-gray-500 group-hover:text-red-500" />
-                      <span className="text-sm font-medium text-gray-600 group-hover:text-blue-500">{votesDown}</span>
                     </button>
 
                     <button className="flex items-center gap-2 px-4 py-2 hover:bg-gray-50 rounded-lg transition-colors group">

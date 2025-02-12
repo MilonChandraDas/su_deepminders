@@ -63,12 +63,14 @@ export async function POST(req: Request) {
         const fakeImageDetectContent = await fakeImageDetectModel.generateContent([fakeImageDetectPrompt, ...imageParts]);
         const fakeImageDetectText = fakeImageDetectContent.response.text();
         const fakeImageDetectJson = fakeImageDetectText[0] !== '{' ? parseOutput(fakeImageDetectText) : JSON.parse(fakeImageDetectText);
-        if (!fakeImageDetectJson) {
-            return NextResponse.json({ error: 'Detected fake image failed to parse' }, { status: 400 });
-        }
-
-        if (fakeImageDetectJson.isFake) {
-            return NextResponse.json({ error: 'Fake image detected', isFake: true }, { status: 400 });
+        let isFake = false;
+        if (fakeImageDetectJson) {
+            if (fakeImageDetectJson.isFake) {
+                // return NextResponse.json({ error: 'Fake image detected', isFake: true }, { status: 400 });
+                isFake = true;
+            }
+        } else {
+            // console.error('Failed to parse fake image detection output');
         }
 
         const prompt = `Genarate title and description for the crime scence photo. Say it in first person POV. Output in this JSON schema
@@ -89,6 +91,7 @@ export async function POST(req: Request) {
         if (!json) {
             return NextResponse.json({ error: 'Failed to parse generated content' }, { status: 500 });
         }
+        json.isFake = isFake;
 
         return NextResponse.json(json);
 

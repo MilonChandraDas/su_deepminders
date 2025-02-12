@@ -27,6 +27,10 @@ type CreateCrimeReportPayload = {
   fileId: string;
 }
 
+type VotePayload = {
+  value: 1 | -1;
+}
+
 export const crimeReportsApi = {
   create: (data: CreateCrimeReportPayload) =>
     api.post<CrimeReport>('/crime-reports', data),
@@ -42,4 +46,10 @@ export const crimeReportsApi = {
 
   delete: (id: number) =>
     api.delete(`/crime-reports/${id}`),
+
+  vote: (id: number, data: VotePayload) =>
+    api.post<{ success: boolean }>(`/crime-reports/${id}/vote`, data),
+
+  removeVote: (id: number) =>
+    api.delete(`/crime-reports/${id}/vote`),
 };

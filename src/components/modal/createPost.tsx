@@ -64,10 +64,10 @@ export default function CreatePostModal({ open, setOpen, onSuccess }: CreatePost
       
       if (data.isFake) {
         alert("This appears to be a fake or manipulated image. Please upload a real crime scene photo.");
-        setSelectedFile(null);
-        setPreview(null);
-        setFileId(null);
-        return;
+        // setSelectedFile(null);
+        // setPreview(null);
+        // setFileId(null);
+        // return;
       }
 
       setTitle(data.title);
