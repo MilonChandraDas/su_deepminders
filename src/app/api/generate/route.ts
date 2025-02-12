@@ -49,6 +49,27 @@ export async function POST(req: Request) {
         const imageParts = [
             fileToGenerativePart(imagePath, mimeType),
         ];
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+
+        const fakeImageDetectPrompt = `Detect if the image is a fake crime scene photo. Say it in first person POV. Output in this JSON schema
+        {
+            "isFake": boolean
+        }`;
+        const fakeImageDetectModel = genAI.getGenerativeModel({
+            model: "gemini-2.0-flash", generationConfig: {
+                responseMimeType: "application/json",
+            }
+        });
+        const fakeImageDetectContent = await fakeImageDetectModel.generateContent([fakeImageDetectPrompt, ...imageParts]);
+        const fakeImageDetectText = fakeImageDetectContent.response.text();
+        const fakeImageDetectJson = fakeImageDetectText[0] !== '{' ? parseOutput(fakeImageDetectText) : JSON.parse(fakeImageDetectText);
+        if (!fakeImageDetectJson) {
+            return NextResponse.json({ error: 'Detected fake image failed to parse' }, { status: 400 });
+        }
+
+        if (fakeImageDetectJson.isFake) {
+            return NextResponse.json({ error: 'Fake image detected', isFake: true }, { status: 400 });
+        }
 
         const prompt = `Genarate title and description for the crime scence photo. Say it in first person POV. Output in this JSON schema
         {
@@ -56,7 +77,6 @@ export async function POST(req: Request) {
             "description": string
         }`;
 
-        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
         const model = genAI.getGenerativeModel({
             model: "gemini-2.0-flash", generationConfig: {
                 responseMimeType: "application/json",

@@ -60,12 +60,21 @@ export default function CreatePostModal({ open, setOpen, onSuccess }: CreatePost
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ imageId: fileId }),
       });
-      const { title: genTitle, description: genDescription } = await genRes.json();
+      const data = await genRes.json();
+      
+      if (data.isFake) {
+        alert("This appears to be a fake or manipulated image. Please upload a real crime scene photo.");
+        setSelectedFile(null);
+        setPreview(null);
+        setFileId(null);
+        return;
+      }
 
-      setTitle(genTitle);
-      setDescription(genDescription);
+      setTitle(data.title);
+      setDescription(data.description);
     } catch (error) {
       console.error("Generation failed:", error);
+      alert("Failed to generate description. Please try again.");
     } finally {
       setIsGenerating(false);
     }
