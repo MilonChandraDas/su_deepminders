@@ -30,6 +30,23 @@ export async function POST(
             return NextResponse.json({ error: 'Report not found' }, { status: 404 });
         }
 
+        // Check if user already voted with the same value
+        const existingVote = await prisma.vote.findUnique({
+            where: {
+                userId_crimeReportId: {
+                    userId: user.id,
+                    crimeReportId: report.id
+                }
+            }
+        });
+
+        if (existingVote && existingVote.value === value) {
+            return NextResponse.json(
+                { error: 'You have already voted in this direction' },
+                { status: 400 }
+            );
+        }
+
         // Upsert the vote (create or update)
         const vote = await prisma.vote.upsert({
             where: {
