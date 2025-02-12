@@ -65,31 +65,21 @@ model OTP {
   createdAt DateTime @default(now())
 }
 
-// Optional: Predefined Division and District for Bangladesh.
-model Division {
-  id        Int        @id @default(autoincrement())
-  name      String     @unique
-  districts District[]
-}
-
 model District {
-  id           Int           @id @default(autoincrement())
-  name         String
-  division     Division      @relation(fields: [divisionId], references: [id])
-  divisionId   Int
+  name         String        @id
   crimeReports CrimeReport[]
 }
 
 // Main model for a crime report.
 model CrimeReport {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String
   // Instead of storing plain strings for location, we reference a District.
-  district    District @relation(fields: [districtId], references: [id])
-  districtId  Int
+  district     District @relation(fields: [districtName], references: [name])
+  districtName String
   // Optional geolocation fields (helpful for a heatmap view)
-  latitude    Float?
+  latitude     Float?
 
   longitude  Float?
   postTime   DateTime  @default(now())

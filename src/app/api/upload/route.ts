@@ -22,7 +22,7 @@ export async function POST(req: Request) {
         const buffer = Buffer.from(bytes);
 
         const uploadDir = path.join(process.cwd(), 'uploads');
-        
+
         // Ensure uploads directory exists
         try {
             await mkdir(uploadDir, { recursive: true });
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
         }
 
         const filePath = path.join(uploadDir, `${id}${path.extname(file.name)}`);
-        
+
         try {
             await writeFile(filePath, buffer);
         } catch (err) {

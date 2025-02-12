@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth.utils';
 import { MediaType } from '@prisma/client';  // Add this import
+import { districts } from '@/lib/districts';
 
 export async function POST(req: Request) {
   try {
@@ -14,12 +15,29 @@ export async function POST(req: Request) {
 
     const crimeTime = new Date();
 
+    console.log({ title, description, districtId, fileId });
+
+    if (!districts.includes(districtId)) {
+      return NextResponse.json({ error: 'Invalid district' }, { status: 400 });
+    }
+
+    const dis = await prisma.district.findUnique({
+      where: { name: districtId },
+    });
+
+    if (!dis) {
+      await prisma.district.create({
+        data: {
+          name: districtId,
+        },
+      });
+    }
+
 
     const crimeReport = await prisma.crimeReport.create({
       data: {
         title,
         description,
-        districtId,
         crimeTime: new Date(crimeTime),
         postedById: user.id,
         media: {
@@ -27,7 +45,8 @@ export async function POST(req: Request) {
             url: `/api/uploads/${fileId}`,
             type: MediaType.IMAGE
           }
-        }
+        },
+        districtName: districtId,
       },
     });
 
@@ -44,7 +63,7 @@ export async function GET(req: Request) {
     const limit = parseInt(searchParams.get('limit') ?? '10');
     const districtId = searchParams.get('districtId');
 
-    const where = districtId ? { districtId: parseInt(districtId) } : {};
+    const where = districtId ? { districtName: districtId } : {};
 
     const crimeReports = await prisma.crimeReport.findMany({
       where,

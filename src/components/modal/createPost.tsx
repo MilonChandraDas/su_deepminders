@@ -84,7 +84,7 @@ export default function CreatePostModal({ open, setOpen, onSuccess }: CreatePost
       await crimeReportsApi.create({
         title,
         description,
-        districtId: parseInt(districtId),
+        districtId,
         fileId,
       });
 

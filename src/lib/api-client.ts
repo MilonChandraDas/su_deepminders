@@ -23,7 +23,7 @@ export interface PaginatedResponse<T> {
 type CreateCrimeReportPayload = {
   title: string;
   description: string;
-  districtId: number;
+  districtId: string;
   fileId: string;
 }
 
